@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  get '/locations', to: 'locations#index' 
-  post '/locations', to: 'locations#show'
+  namespace 'api' do
+    post '/locations', to: 'locations#show'
+  end
 
-  root to: 'locations#index'
+  root to: 'home#index'
   # mount ActionCable.server => '/cable'
 end

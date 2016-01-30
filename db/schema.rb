@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160130225433) do
+ActiveRecord::Schema.define(version: 20160130231004) do
 
   create_table "location_search_results", force: :cascade do |t|
     t.string   "query"
+    t.text     "results"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "metro_area_search_results", primary_key: "metro_area_id", force: :cascade do |t|
     t.text     "results"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

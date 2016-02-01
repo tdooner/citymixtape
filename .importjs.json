@@ -1,0 +1,5 @@
+{
+  "lookup_paths": [
+    "app/assets/javascripts/components"
+  ]
+}

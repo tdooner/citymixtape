@@ -13,4 +13,22 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require_tree ./components
 //= require_tree .
+
+$(function() {
+  var React = require('react'),
+      ReactDOM = require('react-dom');
+  var Homepage = require('components/homepage');
+  var HeaderLocationPicker = require('components/header_location_picker');
+
+  ReactDOM.render(
+    React.createElement(Homepage),
+    document.getElementById("homepage-container")
+  );
+
+  ReactDOM.render(
+    React.createElement(HeaderLocationPicker),
+    document.getElementById("header-location-picker")
+  );
+});

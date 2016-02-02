@@ -8,6 +8,7 @@ Rails.application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
+  config.autoload_paths += [Rails.root.join('lib')]
 
   # Show full error reports.
   config.consider_all_requests_local = true

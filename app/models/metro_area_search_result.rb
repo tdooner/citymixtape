@@ -6,6 +6,7 @@ class MetroAreaSearchResult < ApplicationRecord
     res = find_by(metro_area_id: metro_area_id) ||
       create(metro_area_id: metro_area_id, results: SONGKICK.metro_areas_events(metro_area_id).results.to_json)
 
+    # TODO: filter out "status":"cancelled"
     JSON.parse(res.results)
   end
 end

@@ -22,7 +22,7 @@ var EventList = React.createClass({
   },
 
   componentWillUnmount: function() {
-    // SessionStore.off('change:location', this.updateLocation);
+    SessionStore.off('change:location', this.updateLocation);
   },
 
   render: function() {
@@ -36,6 +36,7 @@ var EventList = React.createClass({
           <td>{row.display_name}</td>
           <td>{row.venue.display_name}</td>
           <td>{row.start}</td>
+          <td>{row.spotify_id}</td>
         </tr>
       );
     }

@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160130231004) do
+ActiveRecord::Schema.define(version: 20160201072545) do
+
+  create_table "artists", primary_key: "musicbrainz_id", id: :string, null: false, force: :cascade do |t|
+    t.string   "spotify_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["musicbrainz_id"], name: "index_artists_on_musicbrainz_id", unique: true
+    t.index ["musicbrainz_id"], name: "sqlite_autoindex_artists_1", unique: true
+  end
 
   create_table "location_search_results", force: :cascade do |t|
     t.string   "query"

@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+require 'json'
+require 'logger'
+require 'net/http'
+require 'stringio'
+require 'uri'
+require 'webrick'
+
+def get_code_from_callback_request
+  blackhole = Logger.new(StringIO.new)
+  server = WEBrick::HTTPServer.new Port: 3000, Logger: blackhole, AccessLog: blackhole
+  trap 'INT' do server.shutdown end
+  code = nil
+  server.mount_proc('/') do |req, res|
+    code = Hash[URI.decode_www_form(req.request_uri.query)]['code']
+    res.body = 'Okay, you can close this now.'
+    server.shutdown
+  end
+  server.start
+
+  return code
+end
+
+spotify_token_file = File.expand_path('../../.spotify-access-token', __FILE__)
+unless File.exist?(spotify_token_file)
+  base = URI('https://accounts.spotify.com/authorize')
+  redirect_uri = 'http://lvh.me:3000/accept'
+  base.query = URI.encode_www_form(
+    client_id: ENV['SPOTIFY_CLIENT_ID'],
+    response_type: 'code',
+    redirect_uri: redirect_uri,
+    scope: 'playlist-modify-public',
+  )
+  $stderr.puts 'Click this link:'
+  $stderr.puts base.to_s
+  code = get_code_from_callback_request
+  $stderr.puts "Got code: #{code}"
+  Net::HTTP.start(base.host, base.port, use_ssl: true) do |http|
+    req = Net::HTTP::Post.new '/api/token'
+    req['Content-Type'] = 'application/x-www-form-urlencoded'
+    req.body = URI.encode_www_form(
+      grant_type: 'authorization_code',
+      code: code,
+      client_id: ENV['SPOTIFY_CLIENT_ID'],
+      client_secret: ENV['SPOTIFY_CLIENT_SECRET'],
+      redirect_uri: redirect_uri
+    )
+    resp = http.request req
+    body = JSON.parse(resp.body)
+    puts "Expires in: #{body['expires_in']}"
+    File.open(spotify_token_file, 'w') do |f|
+      f.puts JSON.pretty_generate(body)
+    end
+  end
+end

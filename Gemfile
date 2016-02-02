@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.0'
 # Use Puma as the app server
 gem 'puma'
 
+gem 'rspotify'
 gem 'songkickr'
 
 group :development, :test do

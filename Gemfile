@@ -9,7 +9,7 @@ gem 'sidekiq'
 # Javascript
 gem 'browserify-rails'
 gem 'jquery-rails'
-gem 'coffee-script'
+gem 'coffee-rails'
 
 # API libraries
 gem 'rspotify'

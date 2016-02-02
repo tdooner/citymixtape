@@ -6,6 +6,11 @@ require 'stringio'
 require 'uri'
 require 'webrick'
 
+unless ENV['SPOTIFY_CLIENT_ID'] && ENV['SPOTIFY_CLIENT_SECRET']
+  puts 'Make sure to export SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET!'
+  exit 1
+end
+
 def get_code_from_callback_request
   blackhole = Logger.new(StringIO.new)
   server = WEBrick::HTTPServer.new Port: 3000, Logger: blackhole, AccessLog: blackhole
@@ -47,7 +52,8 @@ unless File.exist?(spotify_token_file)
     )
     resp = http.request req
     body = JSON.parse(resp.body)
-    puts "Expires in: #{body['expires_in']}"
+    body['expires_at'] = Time.now + body.delete('expires_in')
+    puts "Expires at: #{body['expires_at']}"
     File.open(spotify_token_file, 'w') do |f|
       f.puts JSON.pretty_generate(body)
     end

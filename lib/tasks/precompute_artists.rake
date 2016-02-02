@@ -6,8 +6,8 @@ namespace :precompute do
       concerts.each do |concert|
         concert['performances'].each do |performance|
           puts "Caching artist #{performance['artist']['display_name']}"
-          mbid = performance['artist']['identifier'].first['mbid']
-          SyncArtist.perform_later(mbid)
+          mbid = performance['artist']['identifier'].first['mbid'] rescue nil
+          SyncArtist.perform_later(mbid) if mbid
         end
       end
     end

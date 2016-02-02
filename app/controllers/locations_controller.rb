@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
     res = MetroAreaSearchResult.search(location)
     render(json: res.each do |performance|
       mbid = performance.fetch('performances', []).first.fetch('artist', {}).fetch('identifier', [{}]).fetch(0, {})['mbid']
-      performance['spotify_id'] = Artist.find_by(musicbrainz_id: mbid).spotify_id if mbid
+      performance['spotify_id'] = Artist.find_by(musicbrainz_id: mbid).try(:spotify_id) if mbid
     end)
   end
 end

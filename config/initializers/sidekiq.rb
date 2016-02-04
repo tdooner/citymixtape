@@ -1,6 +1,6 @@
 require 'sidekiq/cli'
 
-if ENV['REDIS_URL'] && ENV['RAILS_ENV'] == 'production'
+if ENV['REDIS_URL'] && ENV['SIDEKIQ_CONCURRENCY']
   Sidekiq.configure_server do |config|
     config.redis = { url: ENV['REDIS_URL'] }
   end
@@ -12,7 +12,7 @@ if ENV['REDIS_URL'] && ENV['RAILS_ENV'] == 'production'
   Thread.abort_on_exception = true
   Thread.new do
     sidekiq = Sidekiq::CLI.instance
-    sidekiq.parse(['-c', '1'])
+    sidekiq.parse(['-c', ENV['SIDEKIQ_CONCURRENCY']])
     sidekiq.run
   end
 

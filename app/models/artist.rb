@@ -12,4 +12,11 @@ class Artist < ApplicationRecord
 
     existing
   end
+
+  def update_top_spotify_tracks
+    return unless spotify_id
+    return if top_spotify_tracks.present?
+
+    update_attribute(:top_spotify_tracks, JSON.generate(SPOTIFY.get_top_tracks(spotify_id)))
+  end
 end

@@ -11,27 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201072545) do
+ActiveRecord::Schema.define(version: 20160204061028) do
 
-  create_table "artists", primary_key: "musicbrainz_id", id: :string, null: false, force: :cascade do |t|
+  create_table "artists", id: false, force: :cascade do |t|
+    t.string   "musicbrainz_id",     null: false
     t.string   "spotify_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.text     "top_spotify_tracks"
     t.index ["musicbrainz_id"], name: "index_artists_on_musicbrainz_id", unique: true
-    t.index ["musicbrainz_id"], name: "sqlite_autoindex_artists_1", unique: true
   end
 
-  create_table "location_search_results", force: :cascade do |t|
+  create_table "location_search_results", id: false, force: :cascade do |t|
+    t.integer  "id",         null: false
     t.string   "query"
     t.text     "results"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "metro_area_search_results", primary_key: "metro_area_id", force: :cascade do |t|
+  create_table "metro_area_search_results", id: false, force: :cascade do |t|
+    t.integer  "metro_area_id", null: false
     t.text     "results"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end

@@ -19,15 +19,21 @@ $(function() {
   var React = require('react'),
       ReactDOM = require('react-dom');
   var Homepage = require('components/homepage');
-  var HeaderLocationPicker = require('components/header_location_picker');
+  //var HeaderLocationPicker = require('components/header_location_picker');
 
+  // This has to be required or else it won't be registered:
+  require('components/session_store');
+
+  //var LocationSelector = require('components/location_selector');
   ReactDOM.render(
     React.createElement(Homepage),
-    document.getElementById("homepage-container")
+    document.getElementById("app")
   );
 
+  /*
   ReactDOM.render(
     React.createElement(HeaderLocationPicker),
     document.getElementById("header-location-picker")
   );
+  */
 });

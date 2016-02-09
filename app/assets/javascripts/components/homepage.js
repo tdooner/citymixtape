@@ -21,15 +21,34 @@ var Homepage = React.createClass({
   },
 
   render: function() {
-    var innerC;
-    if (!this.state.location) {
-      innerC = <LocationSelector />
-    } else {
-      innerC = <EventList locationId={this.state.location} />;
-    }
+    return (
+      <div style={ { width: "100%", height: "100%" } }>
+        <div className="page1">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12">
+                <h1>My Town Playlist</h1>
+              </div>
+            </div>
 
-    return <div>{innerC}</div>;
-  },
+            <div className="row">
+              <div className="col-xs-12">
+                <LocationSelector />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-12">
+              <EventList />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 });
 
 module.exports = Homepage;

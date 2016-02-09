@@ -13,6 +13,14 @@ class Artist < ApplicationRecord
     existing
   end
 
+  def parsed_top_spotify_tracks
+    if top_spotify_tracks.present?
+      JSON.parse(top_spotify_tracks)
+    else
+      []
+    end
+  end
+
   def update_top_spotify_tracks
     return unless spotify_id
     return if top_spotify_tracks.present?

@@ -8,7 +8,6 @@ var SessionStore = fluxify.createStore({
   },
   actionCallbacks: {
     changeLocation: function(updater, location) {
-      console.log(location);
       updater.set({ location: location });
     }
   }

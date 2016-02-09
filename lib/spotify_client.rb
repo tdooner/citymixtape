@@ -15,6 +15,48 @@ class SpotifyClient
 
   def create_playlist(songs)
     maybe_refresh_token
+
+    create_uri = URI('https://api.spotify.com/v1/users/tdooner/playlists')
+    playlist_uri = nil
+    Net::HTTP.start(create_uri.host, create_uri.port, use_ssl: true) do |http|
+      req = Net::HTTP::Post.new(create_uri.request_uri)
+      req['Authorization'] = "Bearer #{@access_token}"
+      req.body = JSON.generate(
+        name: 'My Town Playlist',
+        public: true,
+      )
+      resp = http.request(req)
+      raise "Request Failed: #{resp.code} #{create_uri}" unless resp.code.to_i < 300
+
+      playlist_uri = URI(resp['Location'])
+      playlist_tracks_uri = URI(resp['Location'] + '/tracks')
+      songs.in_groups_of(100, false) do |song_batch|
+        req = Net::HTTP::Post.new(playlist_tracks_uri)
+        req['Authorization'] = "Bearer #{@access_token}"
+        req['Content-Type'] = 'application/json'
+        req.body = JSON.generate(
+          uris: song_batch
+        )
+        resp = http.request(req)
+        raise "Request Failed: #{resp.code} #{req.path}" unless resp.code.to_i < 300
+      end
+    end
+
+    playlist_uri
+  end
+
+  def get_playlist_by_uri(playlist_uri)
+    maybe_refresh_token
+
+    Net::HTTP.start(playlist_uri.host, playlist_uri.port, use_ssl: true) do |http|
+      req = Net::HTTP::Get.new(playlist_uri.request_uri)
+      req['Authorization'] = "Bearer #{@access_token}"
+
+      resp = http.request(req)
+      raise "Request Failed: #{playlist_uri}" unless resp.code.to_i < 300
+
+      JSON.parse(resp.body)
+    end
   end
 
   def get_top_tracks(spotify_id)
@@ -27,6 +69,7 @@ class SpotifyClient
     tracks_uri.query = URI.encode_www_form(country: 'US')
     Net::HTTP.start(tracks_uri.host, tracks_uri.port, use_ssl: true) do |http|
       req = Net::HTTP::Get.new(tracks_uri.request_uri)
+      req['Authorization'] = "Bearer #{@access_token}"
 
       resp = http.request(req)
       raise "Request Failed: #{tracks_uri}" unless resp.code.to_i < 300

@@ -3,7 +3,7 @@ var SessionStore = require('components/session_store');
 
 var EventList = React.createClass({
   getInitialState: function() {
-    return { loading: true, locationId: null, results: null };
+    return { loading: false, locationId: null, results: null, city: null, playlistUri: null };
   },
 
   updateLocation: function(locationId, previousLocationId) {
@@ -13,7 +13,12 @@ var EventList = React.createClass({
       method: 'GET',
       url: '/api/locations/' + locationId + '/events',
     }).done(function(data) {
-      this.setState({ loading: false, results: data });
+      this.setState({ loading: false, results: data.events, city: data.city });
+
+      // TODO: Move this to its own component?
+      $("html, body").animate({
+        scrollTop: $(".page1").height() - 20
+      }, 200)
     }.bind(this));
   },
 
@@ -25,9 +30,26 @@ var EventList = React.createClass({
     SessionStore.off('change:location', this.updateLocation);
   },
 
+  handleCreatePlaylistClick: function(e) { 
+    $.ajax({
+      method: 'POST',
+      url: '/api/locations/' + this.state.locationId + '/playlist',
+    }).done(function(data) {
+      this.setState({ playlistUri: data.spotify_uri });
+    }.bind(this));
+  },
+
   render: function() {
     if (this.state.loading) {
       return <div>Loading...</div>
+    }
+
+    if (this.state.locationId == null) {
+      return <div>Please pick a location</div>;
+    }
+
+    if (this.state.playlistUri != null) {
+      return <a href={this.state.playlistUri}>Open Playlist!</a>;
     }
 
     var renderRow = function(row) {
@@ -41,13 +63,17 @@ var EventList = React.createClass({
       );
     }
 
-    return <div>
-      <table>
-        <tbody>
-          {this.state.results.map(renderRow)}
-        </tbody>
-      </table>
-    </div>;
+    return (
+      <div>
+        <h1>Bands coming to {this.state.city}</h1>
+        <a href="#" onClick={this.handleCreatePlaylistClick}>Create Spotify Playlist</a>
+        <table>
+          <tbody>
+            {this.state.results.map(renderRow)}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 });
 

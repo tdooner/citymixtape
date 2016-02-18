@@ -3,12 +3,12 @@ class EchoNestClient
     @api_key = api_key
   end
 
-  def musicbrainz_to_spotify(musicbrainz_id)
+  def fetch_artist_profile(musicbrainz_id)
     base = URI('https://developer.echonest.com/api/v4/artist/profile')
     base.query = URI.encode_www_form(
       id: "musicbrainz:artist:#{musicbrainz_id}",
       api_key: @api_key,
-      bucket: 'id:spotify'
+      bucket: %w[id:spotify genre]
     )
 
     Rails.logger.debug("Fetching Echo Nest Artist: #{musicbrainz_id}")
@@ -20,6 +20,7 @@ class EchoNestClient
     when 0
       # pass
     when 5
+      Rails.logger.debug "Error received: #{body['response']['status']['message']}"
       return nil
     else
       raise "Error response #{body['response']['status']['code']} from EchoNest: " +
@@ -29,9 +30,14 @@ class EchoNestClient
     foreign_id = body['response']['artist'].fetch('foreign_ids', [])
                    .detect { |h| h['catalog'] == 'spotify' }
 
-    (foreign_id || {})['foreign_id']
+    {
+      'spotify_id' => (foreign_id || {})['foreign_id'],
+      'genres' => body['response']['artist']['genres'].map { |g| g['name'] }
+    }
+  rescue => ex
+    Rails.logger.error "Exception while processing: #{ex.message}"
   ensure
     # poor man's token bucket:
-    sleep(3 - (Time.now - start_time)) if start_time
+    sleep [0, 3 - (Time.now - start_time)].max if start_time
   end
 end

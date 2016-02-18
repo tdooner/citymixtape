@@ -1,10 +1,7 @@
 class SyncArtist < ApplicationJob
   queue_as :default
 
-  def perform(musicbrainz_id)
-    Artist
-      .search_for_many([musicbrainz_id])
-      .values
-      .map(&:update_top_spotify_tracks)
+  def perform(songkick_ids)
+    Artist.where(songkick_id: songkick_ids).each(&:sync!)
   end
 end

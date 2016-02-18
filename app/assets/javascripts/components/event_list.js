@@ -1,5 +1,8 @@
 var React = require('react');
+var Star = require('components/star');
 var SessionStore = require('components/session_store');
+var NProgress = require('nprogress');
+var flux = require('fluxify');
 
 var EventList = React.createClass({
   getInitialState: function() {
@@ -9,11 +12,15 @@ var EventList = React.createClass({
   updateLocation: function(locationId, previousLocationId) {
     this.setState({ loading: true, locationId: locationId });
 
+    NProgress.configure({ trickleSpeed: 100 });
+    NProgress.start();
+
     $.ajax({
       method: 'GET',
       url: '/api/locations/' + locationId + '/events',
     }).done(function(data) {
       this.setState({ loading: false, results: data.events, city: data.city });
+      NProgress.done();
 
       // TODO: Move this to its own component?
       $("html, body").animate({
@@ -39,9 +46,13 @@ var EventList = React.createClass({
     }.bind(this));
   },
 
+  handleResetLocation: function() {
+    flux.doAction('changeLocation', null)
+  },
+
   render: function() {
     if (this.state.loading) {
-      return <div>Loading...</div>
+      return <p>Loading...</p>
     }
 
     if (this.state.locationId == null) {
@@ -49,29 +60,33 @@ var EventList = React.createClass({
     }
 
     if (this.state.playlistUri != null) {
-      return <a href={this.state.playlistUri}>Open Playlist!</a>;
+      return <div>
+        <h2>Playlist Created!</h2>
+        <p><a href={this.state.playlistUri}>Open Playlist!</a></p>
+      </div>;
     }
 
-    var renderRow = function(row) {
+    var renderArtist = function(artist) {
       return (
-        <tr key={row.id}>
-          <td>{row.display_name}</td>
-          <td>{row.venue.display_name}</td>
-          <td>{row.start}</td>
-          <td>{row.spotify_id}</td>
-        </tr>
+        <li className="event-list__list-item">
+          <Star objectId={artist.id} objectType="artist" />
+          <span>{artist.display_name}</span>
+        </li>
       );
     }
 
     return (
       <div>
-        <h1>Bands coming to {this.state.city}</h1>
+        <h2>Bands coming to{' '}
+          <span className="event-list__city" onClick={this.handleResetLocation}>{this.state.city}</span>
+        </h2>
+        <p>
+          Pick 10 bands you like. This will help us create a playlist for you.
+        </p>
         <a href="#" onClick={this.handleCreatePlaylistClick}>Create Spotify Playlist</a>
-        <table>
-          <tbody>
-            {this.state.results.map(renderRow)}
-          </tbody>
-        </table>
+        <ul className="event-list__list">
+          {this.state.results.map(renderArtist)}
+        </ul>
       </div>
     );
   }

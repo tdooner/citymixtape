@@ -3,10 +3,21 @@ var React = require('react'),
 
 var SessionStore = fluxify.createStore({
   id: 'sessionStore',
+
   initialState: {
-    location: null
+    location: null,
+    stars: []
   },
+
   actionCallbacks: {
+    updateStars: function(updater, stars) {
+      updater.set({
+        stars: stars.map(function(e) {
+          return e[0] + "-" + e[1]
+        })
+      });
+    },
+
     changeLocation: function(updater, location) {
       updater.set({ location: location });
     }

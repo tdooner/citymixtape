@@ -11,30 +11,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204061028) do
+ActiveRecord::Schema.define(version: 20160215195338) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "artists", id: false, force: :cascade do |t|
-    t.string   "musicbrainz_id",     null: false
+    t.integer  "songkick_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "spotify_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
     t.text     "top_spotify_tracks"
-    t.index ["musicbrainz_id"], name: "index_artists_on_musicbrainz_id", unique: true
+    t.jsonb    "genres",             default: [], null: false
+    t.string   "musicbrainz_id",                  null: false
+    t.jsonb    "similar_artists",    default: [], null: false
+    t.index ["musicbrainz_id"], name: "index_artists_on_musicbrainz_id", unique: true, using: :btree
+    t.index ["similar_artists"], name: "similar_artists_json", using: :gin
   end
 
-  create_table "location_search_results", id: false, force: :cascade do |t|
-    t.integer  "id",         null: false
+  create_table "location_search_results", force: :cascade do |t|
     t.string   "query"
     t.text     "results"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "metro_area_search_results", id: false, force: :cascade do |t|
-    t.integer  "metro_area_id", null: false
+  create_table "metro_area_search_results", primary_key: "metro_area_id", id: :integer, force: :cascade do |t|
     t.text     "results"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sessions", primary_key: "session_id", id: :string, force: :cascade do |t|
+    t.text    "stars"
+    t.integer "metro_area_id"
   end
 
 end

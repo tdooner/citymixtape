@@ -5,10 +5,15 @@
     = csrf_meta_tags
     = action_cable_meta_tag
 
+    :javascript
+      window.bootstrap = {};
+      window.bootstrap.stars = #{@bootstrap_data[:stars].to_json};
+      window.bootstrap.metroArea = #{@bootstrap_data[:metro_area].to_json};
+
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
 
     %link{ rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', integrity: 'sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7', crossorigin: 'anonymous'}
 
-  %body#app
-    = yield
+  %body
+    #app-container

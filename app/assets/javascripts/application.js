@@ -19,21 +19,26 @@ $(function() {
   var React = require('react'),
       ReactDOM = require('react-dom');
   var Homepage = require('components/homepage');
+  var flux = require('fluxify');
   //var HeaderLocationPicker = require('components/header_location_picker');
 
   // This has to be required or else it won't be registered:
   require('components/session_store');
 
+  if (window.bootstrap && window.bootstrap.stars) {
+    flux.doAction('updateStars', window.bootstrap.stars)
+  }
+
+  var homepageProps = {};
+
+  if (window.bootstrap && window.bootstrap.metroArea) {
+    homepageProps['initialSearchQuery'] = window.bootstrap.metroArea.name;
+    flux.doAction('changeLocation', window.bootstrap.metroArea.id)
+  }
+
   //var LocationSelector = require('components/location_selector');
   ReactDOM.render(
-    React.createElement(Homepage),
-    document.getElementById("app")
+    React.createElement(Homepage, homepageProps),
+    document.getElementById("app-container")
   );
-
-  /*
-  ReactDOM.render(
-    React.createElement(HeaderLocationPicker),
-    document.getElementById("header-location-picker")
-  );
-  */
 });

@@ -4,7 +4,12 @@ Rails.application.routes.draw do
     post '/locations', to: '/locations#show'
     get '/locations/:id/events', to: '/locations#events'
     post '/locations/:id/playlist', to: '/location_playlists#create'
+
+    post '/stars/:type/:id', to: '/stars#create'
+    delete '/stars/:type/:id', to: '/stars#destroy'
   end
+
+  resources :sessions, only: %i[show]
 
   root to: 'home#index'
   # mount ActionCable.server => '/cable'

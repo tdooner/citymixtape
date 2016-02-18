@@ -1,26 +1,16 @@
 class LocationPlaylistsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def create
     location = params[:id]
 
-    res = MetroAreaSearchResult.search(location)
-    playlist_songs = []
-    res.each do |performance|
-      mbid = performance
-        .fetch('performances', [])
-        .first
-        .fetch('artist', {})
-        .fetch('identifier', [{}])
-        .fetch(0, {})['mbid']
-      next unless mbid
+    picker = PlaylistSongPicker.new(location)
 
-      artist = Artist.find_by(musicbrainz_id: mbid)
-      next unless artist
-      next unless artist.parsed_top_spotify_tracks.any?
-
-      playlist_songs << artist.parsed_top_spotify_tracks.first
+    if session.id && (user_session = Session.find_by(session_id: session.id))
+      picker.personalize(user_session.stars)
     end
 
-    playlist_uri = SPOTIFY.create_playlist(playlist_songs.map { |_name, id| id })
+    playlist_uri = SPOTIFY.create_playlist(picker.songs)
     human_uri = SPOTIFY.get_playlist_by_uri(playlist_uri)['external_urls']['spotify']
 
     render json: {

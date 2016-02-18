@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', github: 'rails/rails'
+gem 'rails', '5.0.0.beta2'
 gem 'puma'
 gem 'haml'
+gem 'pg'
 
 gem 'sidekiq'
 
@@ -16,7 +17,6 @@ gem 'rspotify'
 gem 'songkickr'
 
 group :development, :test do
-  gem 'sqlite3'
   gem 'pry-rails'
   gem 'byebug'
 end
@@ -34,6 +34,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :production do
-  gem 'pg'
   gem 'rails_12factor'
 end

@@ -193,6 +193,9 @@ GEM
     tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uglifier (2.7.2)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
@@ -224,6 +227,7 @@ DEPENDENCIES
   songkickr
   spring
   tzinfo-data
+  uglifier
   web-console (~> 3.0)
 
 BUNDLED WITH

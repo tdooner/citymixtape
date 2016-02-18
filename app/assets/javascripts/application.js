@@ -16,6 +16,7 @@
 //= require_tree .
 
 $(function() {
+
   var React = require('react'),
       ReactDOM = require('react-dom');
   var Homepage = require('components/homepage');

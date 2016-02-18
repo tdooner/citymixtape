@@ -18,6 +18,7 @@
 $(function() {
   var React = require('react'),
       ReactDOM = require('react-dom');
+
   var Homepage = require('components/homepage');
   var flux = require('fluxify');
   //var HeaderLocationPicker = require('components/header_location_picker');

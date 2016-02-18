@@ -7,8 +7,7 @@
     "nprogress": "^0.2.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "reactify": "^1.1.1",
-    "uglifyify": "^3.0.1"
+    "reactify": "^1.1.1"
   },
   "license": "MIT",
   "engines": {

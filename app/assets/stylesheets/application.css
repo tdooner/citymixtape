@@ -23,7 +23,6 @@ body, html {
 
 .location-selector__container {
   position: relative;
-  margin-top: 40px;
 }
 
 .location-selector__input {

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     post '/locations', to: '/locations#show'
     get '/locations/:id/events', to: '/locations#events'
     post '/locations/:id/playlist', to: '/location_playlists#create'
+    get '/genres', to: '/genres#index'
+    post '/genres', to: '/genres#create'
 
     post '/stars/:type/:id', to: '/stars#create'
     delete '/stars/:type/:id', to: '/stars#destroy'

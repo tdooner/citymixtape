@@ -21,3 +21,4 @@
 .byebug_history
 node_modules
 .spotify-access-token
+public/assets

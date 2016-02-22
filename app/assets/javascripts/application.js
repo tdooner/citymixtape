@@ -16,7 +16,6 @@
 //= require_tree .
 
 $(function() {
-
   var React = require('react'),
       ReactDOM = require('react-dom');
   var Homepage = require('components/homepage');
@@ -28,6 +27,10 @@ $(function() {
 
   if (window.bootstrap && window.bootstrap.stars) {
     flux.doAction('updateStars', window.bootstrap.stars)
+  }
+
+  if (window.bootstrap && window.bootstrap.genres) {
+    flux.doAction('changeGenres', window.bootstrap.genres)
   }
 
   var homepageProps = {};

@@ -6,7 +6,7 @@ var flux = require('fluxify');
 
 var EventList = React.createClass({
   getInitialState: function() {
-    return { loading: false, locationId: null, results: null, city: null, playlistUri: null };
+    return { loading: false, locationId: SessionStore.location, results: null, city: null, playlistUri: null };
   },
 
   updateLocation: function(locationId, previousLocationId) {
@@ -21,16 +21,15 @@ var EventList = React.createClass({
     }).done(function(data) {
       this.setState({ loading: false, results: data.events, city: data.city });
       NProgress.done();
-
-      // TODO: Move this to its own component?
-      $("html, body").animate({
-        scrollTop: $(".page1").height() - 20
-      }, 200)
     }.bind(this));
   },
 
   componentWillMount: function() {
     SessionStore.on('change:location', this.updateLocation);
+
+    if (this.state.loading == false && this.state.locationId) {
+      this.updateLocation(this.state.locationId, null)
+    }
   },
 
   componentWillUnmount: function() {
@@ -62,7 +61,7 @@ var EventList = React.createClass({
     if (this.state.playlistUri != null) {
       return <div>
         <h2>Playlist Created!</h2>
-        <p><a href={this.state.playlistUri}>Open Playlist!</a></p>
+        <p><a href={this.state.playlistUri} target="_blank">Open Playlist!</a></p>
       </div>;
     }
 

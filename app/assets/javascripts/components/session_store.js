@@ -20,6 +20,10 @@ var SessionStore = fluxify.createStore({
 
     changeLocation: function(updater, location) {
       updater.set({ location: location });
+    },
+
+    changeGenres: function(updater, genres) {
+      updater.set({ genres: genres });
     }
   }
 });

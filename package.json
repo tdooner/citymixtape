@@ -12,5 +12,9 @@
   "license": "MIT",
   "engines": {
     "node": ">= 0.10"
+  },
+  "devDependencies": {
+    "jslint": "^0.9.6",
+    "jsxhint": "^0.15.1"
   }
 }

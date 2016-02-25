@@ -1,5 +1,6 @@
 GENRES = File.readlines(Rails.root.join('config/genres.txt')).map(&:strip)
 
+# TODO: Extract this into a lib class or somewhere not an initializer
 SIMILAR_GENRES = {}
 Artist.where('genres is not null').find_each do |artist|
   artist.genres.combination(2).each do |left, right|

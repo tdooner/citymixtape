@@ -4,6 +4,7 @@ class PlaylistSongPicker
     @starred_songkick_ids = []
     @similar_songkick_ids = []
     @suggested_genres = []
+    @playlist_songs = nil
   end
 
   # @param stars Arary<String, Integer> Array of objects like ["artist", 1234]
@@ -21,6 +22,8 @@ class PlaylistSongPicker
   end
 
   def songs
+    return @playlist_songs unless @playlist_songs.nil?
+
     res = MetroAreaSearchResult.search(@metro_area_id)
 
     mbids = res.flat_map do |show|
@@ -47,7 +50,7 @@ class PlaylistSongPicker
       end
     end.compact
 
-    playlist_songs = []
+    @playlist_songs = []
 
     # TODO: Normalize by popularity or something -- 86 are similar to Bieber
 
@@ -60,26 +63,26 @@ class PlaylistSongPicker
 
     @artists.find_all { |a| a[:score] == 6 }.shuffle.each do |artist|
       next unless artist[:songs].present?
-      playlist_songs += artist[:songs].shuffle.first(3).map(&:last)
+      @playlist_songs += artist[:songs].shuffle.first(3).map(&:last)
     end
 
     @artists.find_all { |a| a[:score] >= 3 && a[:score] < 6 }.shuffle.each do |artist|
       next unless artist[:songs].present?
-      playlist_songs += artist[:songs].shuffle.first(2).map(&:last)
+      @playlist_songs += artist[:songs].shuffle.first(2).map(&:last)
     end
 
     @artists.find_all { |a| a[:score] > 0 && a[:score] < 3 }.shuffle.each do |artist|
-      break if playlist_songs.length >= 30
+      break if @playlist_songs.length >= 30
       next unless artist[:songs].present?
-      playlist_songs += [artist[:songs].shuffle.first.last]
+      @playlist_songs += [artist[:songs].shuffle.first.last]
     end
 
     @artists.find_all { |a| a[:score] == 0 }.shuffle.each do |artist|
-      break if playlist_songs.length >= 30
+      break if @playlist_songs.length >= 30
       next unless artist[:songs].present?
-      playlist_songs += [artist[:songs].shuffle.first.last]
+      @playlist_songs += [artist[:songs].shuffle.first.last]
     end
 
-    playlist_songs
+    @playlist_songs
   end
 end

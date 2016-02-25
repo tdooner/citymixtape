@@ -7,15 +7,17 @@ class PlaylistSongPicker
   end
 
   # @param stars Arary<String, Integer> Array of objects like ["artist", 1234]
-  def personalize(stars)
+  def personalize_stars(stars)
     @starred_songkick_ids = stars.find_all { |type, _id| type == 'artist' }.map(&:last)
 
     @similar_songkick_ids = @starred_songkick_ids.flat_map do |i|
       Artist.where('similar_artists @> ?', i.to_s).pluck(:songkick_id)
     end.uniq
+  end
 
-    @suggested_genres = Artist.where(songkick_id: @starred_songkick_ids)
-      .pluck(:genres).flatten.uniq.to_set
+  # @param stars Arary<String> Array of genres
+  def personalize_genres(genres)
+    @suggested_genres = SIMILAR_GENRES.values_at(*genres).flatten.to_set
   end
 
   def songs

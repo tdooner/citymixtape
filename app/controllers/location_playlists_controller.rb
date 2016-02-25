@@ -7,7 +7,8 @@ class LocationPlaylistsController < ApplicationController
     picker = PlaylistSongPicker.new(location)
 
     if session.id && (user_session = Session.find_by(session_id: session.id))
-      picker.personalize(user_session.stars)
+      picker.personalize_stars(user_session.stars)
+      picker.personalize_genres(user_session.genres)
     end
 
     playlist_uri = SPOTIFY.create_playlist(picker.songs)

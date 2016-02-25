@@ -13,13 +13,14 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./components
+//= require_tree ./pages
 //= require_tree .
 
 $(function() {
   var React = require('react'),
       ReactDOM = require('react-dom');
-  var Homepage = require('components/homepage');
   var flux = require('fluxify');
+  var AppContainer = require('components/app_container');
   //var HeaderLocationPicker = require('components/header_location_picker');
 
   // This has to be required or else it won't be registered:
@@ -33,16 +34,16 @@ $(function() {
     flux.doAction('changeGenres', window.bootstrap.genres)
   }
 
-  var homepageProps = {};
+  var appProps = {};
 
   if (window.bootstrap && window.bootstrap.metroArea) {
-    homepageProps['initialSearchQuery'] = window.bootstrap.metroArea.name;
+    appProps['initialSearchQuery'] = window.bootstrap.metroArea.name;
     flux.doAction('changeLocation', window.bootstrap.metroArea.id)
   }
 
   //var LocationSelector = require('components/location_selector');
   ReactDOM.render(
-    React.createElement(Homepage, homepageProps),
+    React.createElement(AppContainer, appProps),
     document.getElementById("app-container")
   );
 });

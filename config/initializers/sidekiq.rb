@@ -10,6 +10,7 @@ if ENV['REDIS_URL'] && Rails.env.production?
   end
 
   if concurrency = ENV['SIDEKIQ_CONCURRENCY']
+    Rails.logger.info "starting sidekiq with concurrency: #{ENV['SIDEKIQ_CONCURRENCY']}"
     Thread.abort_on_exception = true
     Thread.new do
       sidekiq = Sidekiq::CLI.instance

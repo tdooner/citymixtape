@@ -7,9 +7,8 @@ namespace :precompute do
         concert['performances'].each do |performance|
           puts "Caching artist #{performance['artist']['display_name']}"
           songkick_id = performance['artist']['id']
-          mbids = performance['artist']['identifier'].map { |i| i['mbid'] }
 
-          SyncArtist.perform_later(songkick_id, mbids) if mbids.any?
+          SyncArtist.perform_later(songkick_id) if mbids.any?
         end
       end
     end

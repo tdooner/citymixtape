@@ -16,7 +16,11 @@ namespace :precompute do
 
       metro_areas.each do |metro_area_id|
         puts "  dumping metro area #{metro_area_id}"
-        MetroAreaSearchResult.search(metro_area_id)
+
+        MetroAreaSearchResult.transaction do
+          MetroAreaSearchResult.where(metro_area_id: metro_area_id).destroy_all
+          MetroAreaSearchResult.search(metro_area_id)
+        end
       end
     end
   end

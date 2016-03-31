@@ -6,40 +6,31 @@ var flux = require('fluxify');
 
 var EventList = React.createClass({
   getInitialState: function() {
-    return { loading: false, locationId: SessionStore.location, results: null, city: null, playlistUri: null };
+    return { loading: false, results: null, city: null, playlistUri: null };
   },
 
-  updateLocation: function(locationId, previousLocationId) {
-    this.setState({ loading: true, locationId: locationId });
+  componentDidMount: function() {
+    if (!this.props.locationId) {
+      return;
+    }
+    this.setState({ loading: true });
 
     NProgress.configure({ trickleSpeed: 100 });
     NProgress.start();
 
     $.ajax({
       method: 'GET',
-      url: '/api/locations/' + locationId + '/events',
+      url: '/api/locations/' + this.props.locationId + '/events',
     }).done(function(data) {
       this.setState({ loading: false, results: data.events, city: data.city });
       NProgress.done();
     }.bind(this));
   },
 
-  componentWillMount: function() {
-    SessionStore.on('change:location', this.updateLocation);
-
-    if (this.state.loading == false && this.state.locationId) {
-      this.updateLocation(this.state.locationId, null)
-    }
-  },
-
-  componentWillUnmount: function() {
-    SessionStore.off('change:location', this.updateLocation);
-  },
-
-  handleCreatePlaylistClick: function(e) { 
+  handleCreatePlaylistClick: function(e) {
     $.ajax({
       method: 'POST',
-      url: '/api/locations/' + this.state.locationId + '/playlist',
+      url: '/api/locations/' + this.props.locationId + '/playlist',
     }).done(function(data) {
       this.setState({ playlistUri: data.spotify_uri });
     }.bind(this));
@@ -54,8 +45,12 @@ var EventList = React.createClass({
       return <p>Loading...</p>
     }
 
-    if (this.state.locationId == null) {
-      return <div>Please pick a location</div>;
+    if (this.state.results == null) {
+      return <div>no results</div>;
+    }
+
+    if (this.props.locationId == null) {
+      return <div>Error: no location given</div>;
     }
 
     if (this.state.playlistUri != null) {

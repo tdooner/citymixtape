@@ -52,7 +52,7 @@ var LocationSelector = React.createClass({
       var renderResult = function(res) {
         return (
           <li onClick={clickHandler}
-              key={res[0]}
+              key={res[1]}
               data-location-id={res[0]}
               className="location-selector__autocomplete__li">{res[1]}</li>
         );

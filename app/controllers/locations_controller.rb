@@ -23,7 +23,7 @@ class LocationsController < ApplicationController
     location = params[:id].to_i
 
     current_session = Session.find_or_create_by(session_id: session.id)
-    current_session.update_attributes(metro_area_id: location)
+    current_session.update_attributes(metro_area_id: location) unless location == 0
 
     performances = MetroAreaSearchResult.search(location)
     events = performances

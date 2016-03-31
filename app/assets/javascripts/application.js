@@ -26,24 +26,9 @@ $(function() {
   // This has to be required or else it won't be registered:
   require('components/session_store');
 
-  if (window.bootstrap && window.bootstrap.stars) {
-    flux.doAction('updateStars', window.bootstrap.stars)
-  }
-
-  if (window.bootstrap && window.bootstrap.genres) {
-    flux.doAction('changeGenres', window.bootstrap.genres)
-  }
-
-  var appProps = {};
-
-  if (window.bootstrap && window.bootstrap.metroArea) {
-    appProps['initialSearchQuery'] = window.bootstrap.metroArea.name;
-    flux.doAction('changeLocation', window.bootstrap.metroArea.id)
-  }
-
   //var LocationSelector = require('components/location_selector');
   ReactDOM.render(
-    React.createElement(AppContainer, appProps),
+    React.createElement(AppContainer, { bootstrapData: window.bootstrap || {} }),
     document.getElementById("app-container")
   );
 });

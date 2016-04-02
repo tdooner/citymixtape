@@ -3,6 +3,7 @@ require 'base64'
 
 class SpotifyClient
   TOKEN_FILENAME = '.spotify-access-token'
+  class PlaylistNotFound < StandardError; end
 
   def initialize(refresh_token, client_id=ENV['SPOTIFY_CLIENT_ID'], client_secret=ENV['SPOTIFY_CLIENT_SECRET'])
     raise ArgumentError, 'You must supply a spotify refresh token!' unless refresh_token
@@ -22,16 +23,45 @@ class SpotifyClient
       req = Net::HTTP::Post.new(create_uri.request_uri)
       req['Authorization'] = "Bearer #{@access_token}"
       req.body = JSON.generate(
-        name: 'My Town Playlist',
+        name: 'City Mixtape',
         public: true,
       )
       resp = http.request(req)
       raise "Request Failed: #{resp.code} #{create_uri}" unless resp.code.to_i < 300
 
-      playlist_uri = URI(resp['Location'])
-      playlist_tracks_uri = URI(resp['Location'] + '/tracks')
+      # TODO: Don't make another HTTP connection here
+      replace_playlist_tracks(resp['Location'], songs)
+    end
+
+    playlist_uri
+  end
+
+  def replace_playlist_tracks(playlist_uri, songs)
+    maybe_refresh_token
+
+    playlist = get_playlist_by_uri(URI(playlist_uri))
+
+    playlist_uri << '/' if String === playlist_uri && !playlist_uri.ends_with?('/')
+    playlist_uri = URI.join(playlist_uri, 'tracks')
+
+    Net::HTTP.start(playlist_uri.host, playlist_uri.port, use_ssl: true) do |http|
+      # First clear all the songs from the playlist:
+      bunch = 0
+      while bunch < playlist['tracks']['total']
+        req = Net::HTTP::Delete.new(playlist_uri.request_uri)
+        req['Authorization'] = "Bearer #{@access_token}"
+        req.body = JSON.generate(
+          positions: (bunch...[(bunch + 100), playlist['tracks']['total']].min).to_a,
+          snapshot_id: playlist['snapshot_id']
+        )
+        resp = http.request(req)
+        raise "Request Failed: #{resp.code} #{playlist_uri}" unless resp.code.to_i < 300
+        bunch += 100
+      end
+
+      # Then append songs:
       songs.in_groups_of(100, false) do |song_batch|
-        req = Net::HTTP::Post.new(playlist_tracks_uri)
+        req = Net::HTTP::Post.new(playlist_uri.request_uri)
         req['Authorization'] = "Bearer #{@access_token}"
         req['Content-Type'] = 'application/json'
         req.body = JSON.generate(
@@ -50,9 +80,11 @@ class SpotifyClient
 
     Net::HTTP.start(playlist_uri.host, playlist_uri.port, use_ssl: true) do |http|
       req = Net::HTTP::Get.new(playlist_uri.request_uri)
+      req['Accept'] = 'application/json'
       req['Authorization'] = "Bearer #{@access_token}"
 
       resp = http.request(req)
+      raise PlaylistNotFound if resp.code.to_i == 404
       raise "Request Failed: #{playlist_uri}" unless resp.code.to_i < 300
 
       JSON.parse(resp.body)

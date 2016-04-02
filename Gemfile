@@ -4,6 +4,7 @@ gem 'rails', '5.0.0.beta2'
 gem 'puma'
 gem 'haml'
 gem 'pg'
+gem 'airbrake'
 
 gem 'sidekiq'
 

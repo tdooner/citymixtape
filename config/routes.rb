@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   resources :sessions, only: %i[show]
 
-  %w[genres events].each do |js_page|
+  %w[genres events playlist].each do |js_page|
     get js_page, to: 'home#index'
   end
   root to: 'home#index'

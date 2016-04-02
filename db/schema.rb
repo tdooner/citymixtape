@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225170319) do
+ActiveRecord::Schema.define(version: 20160402214743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20160225170319) do
     t.integer "metro_area_id"
     t.jsonb   "genres",         default: [], null: false
     t.jsonb   "playlist_songs"
-    t.jsonb   "playlist_uri"
+    t.string  "playlist_uri"
   end
 
 end

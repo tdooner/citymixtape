@@ -6,7 +6,8 @@ var SessionStore = fluxify.createStore({
 
   initialState: {
     location: null,
-    stars: []
+    stars: [],
+    playlistUrl: null,
   },
 
   actionCallbacks: {
@@ -24,7 +25,11 @@ var SessionStore = fluxify.createStore({
 
     changeGenres: function(updater, genres) {
       updater.set({ genres: genres });
-    }
+    },
+
+    changePlaylistUrl: function(updater, url) {
+      updater.set({ playlistUrl: url });
+    },
   }
 });
 

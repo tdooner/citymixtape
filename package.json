@@ -19,6 +19,7 @@
     "node": ">= 0.10"
   },
   "devDependencies": {
+    "eslint-config-brigade": "^2.0.3",
     "jslint": "^0.9.6",
     "jsxhint": "^0.15.1"
   }

@@ -1,5 +1,7 @@
 {
   "lookup_paths": [
-    "app/assets/javascripts/components"
-  ]
+    "app/assets/javascripts/components",
+    "app/assets/javascripts/pages"
+  ],
+  "eslint_executable": "node_modules/.bin/eslint"
 }

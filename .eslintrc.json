@@ -6,6 +6,7 @@
       "jsx": true
     }
   },
+  "extends": ["eslint-config-brigade/react"],
   "plugins": [
     "react"
   ]

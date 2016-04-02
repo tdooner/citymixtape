@@ -32,7 +32,7 @@ var EventList = React.createClass({
       method: 'POST',
       url: '/api/locations/' + this.props.locationId + '/playlist',
     }).done(function(data) {
-      this.setState({ playlistUri: data.spotify_uri });
+      flux.doAction('changePlaylistUrl', data.spotify_uri)
     }.bind(this));
   },
 
@@ -51,13 +51,6 @@ var EventList = React.createClass({
 
     if (this.props.locationId == null) {
       return <div>Error: no location given</div>;
-    }
-
-    if (this.state.playlistUri != null) {
-      return <div>
-        <h2>Playlist Created!</h2>
-        <p><a href={this.state.playlistUri} target="_blank">Open Playlist!</a></p>
-      </div>;
     }
 
     var renderArtist = function(artist) {

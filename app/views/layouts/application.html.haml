@@ -10,6 +10,7 @@
       window.bootstrap.stars = #{@bootstrap_data[:stars].to_json};
       window.bootstrap.metroArea = #{@bootstrap_data[:metro_area].to_json};
       window.bootstrap.genres = #{@bootstrap_data[:genres].to_json};
+      window.bootstrap.playlist = #{@bootstrap_data[:playlist].to_json};
 
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'

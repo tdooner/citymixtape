@@ -1,3 +1,5 @@
+require 'genre_similarity'
+
 class PlaylistSongPicker
   def initialize(metro_area_id)
     @metro_area_id = metro_area_id
@@ -18,7 +20,7 @@ class PlaylistSongPicker
 
   # @param stars Arary<String> Array of genres
   def personalize_genres(genres)
-    @suggested_genres = SIMILAR_GENRES.values_at(*genres).flatten.to_set
+    @suggested_genres = GenreSimilarity.similar_to(*genres).flatten.to_set
   end
 
   def songs

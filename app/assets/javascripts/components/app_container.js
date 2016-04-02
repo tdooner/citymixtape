@@ -1,5 +1,7 @@
 var React = require('react');
+
 var SessionStore = require('components/session_store');
+
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var Link = require('react-router').Link;
@@ -10,6 +12,7 @@ var flux = require('fluxify');
 var HomePage = require('pages/home_page');
 var GenrePage = require('pages/genre_page');
 var EventListPage = require('pages/event_list_page');
+var PlaylistPage = require('pages/playlist_page');
 
 var AppContainer = React.createClass({
   getDefaultProps: function() {
@@ -29,7 +32,13 @@ var AppContainer = React.createClass({
     this.setState({ genres: genres });
   },
 
+  updatePlaylistUrl: function(playlistUrl, previousPlaylistUrl) {
+    console.log(playlistUrl);
+    this.setState({ playlistUrl: playlistUrl });
+  },
+
   componentWillMount: function() {
+    SessionStore.on('change:playlistUrl', this.updatePlaylistUrl);
     SessionStore.on('change:location', this.updateLocation);
     SessionStore.on('change:genres', this.updateGenres);
     SessionStore.on('change', this.navigate);
@@ -47,17 +56,23 @@ var AppContainer = React.createClass({
     if (this.props.bootstrapData.metroArea) {
       flux.doAction('changeLocation', this.props.bootstrapData.metroArea.id)
     }
+
+    if (this.props.bootstrapData.playlist) {
+      flux.doAction('changePlaylistUrl', this.props.bootstrapData.playlist.url)
+    }
   },
 
   componentWillUnmount: function() {
+    SessionStore.off('change:playlistUrl', this.updatePlaylistUrl);
     SessionStore.off('change:location', this.updateLocation);
     SessionStore.off('change:genres', this.updateGenres);
     SessionStore.off('change', this.navigate);
   },
 
   navigate: function() {
-    console.log(this.state)
-    if (this.state.location && this.state.genres.length == 0) {
+    if (this.state.playlistUrl) {
+      browserHistory.push('/playlist');
+    } else if (this.state.location && this.state.genres.length == 0) {
       browserHistory.push('/genre');
     } else if (this.state.location && this.state.genres.length > 0) {
       browserHistory.push('/events');
@@ -70,6 +85,7 @@ var AppContainer = React.createClass({
         <Route path="/" component={HomePage} />
         <Route path="/genre" component={GenrePage} />
         <Route path="/events" component={EventListPage} />
+        <Route path="/playlist" component={PlaylistPage} />
       </Router>
     )
   }

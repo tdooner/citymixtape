@@ -17,6 +17,14 @@
 //= require_tree .
 
 $(function() {
+  if (process.env.NODE_ENV === "production") {
+    var airbrakeClient = require('airbrake-js');
+    new airbrakeClient({
+      projectId: '122450',
+      projectKey: '8dc1ad11e4414db1e7cff67084b8ce78',
+    });
+  }
+
   var React = require('react'),
       ReactDOM = require('react-dom');
   var flux = require('fluxify');

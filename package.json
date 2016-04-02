@@ -1,8 +1,10 @@
 {
   "name": "mytownplaylist",
   "dependencies": {
+    "airbrake-js": "^0.5.8",
     "browserify": "~> 10.2.4",
     "browserify-incremental": "^3.0.1",
+    "envify": "^3.4.0",
     "eslint": "^2.4.0",
     "eslint-plugin-react": "^4.2.3",
     "fluxify": "^0.2.3",

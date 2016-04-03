@@ -78,6 +78,7 @@ class SpotifyClient
   def get_playlist_by_uri(playlist_uri)
     maybe_refresh_token
 
+    playlist_uri = URI(playlist_uri)
     Net::HTTP.start(playlist_uri.host, playlist_uri.port, use_ssl: true) do |http|
       req = Net::HTTP::Get.new(playlist_uri.request_uri)
       req['Accept'] = 'application/json'

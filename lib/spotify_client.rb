@@ -29,8 +29,10 @@ class SpotifyClient
       resp = http.request(req)
       raise "Request Failed: #{resp.code} #{create_uri}" unless resp.code.to_i < 300
 
+      playlist_uri = resp['Location']
+
       # TODO: Don't make another HTTP connection here
-      replace_playlist_tracks(resp['Location'], songs)
+      replace_playlist_tracks(playlist_uri, songs)
     end
 
     playlist_uri

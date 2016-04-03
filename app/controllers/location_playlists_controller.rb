@@ -16,7 +16,7 @@ class LocationPlaylistsController < ApplicationController
 
     user_session.update_attributes(
       playlist_songs: picker.songs,
-      playlist_uri: human_uri,
+      playlist_uri: playlist_uri,
     )
 
     render json: {

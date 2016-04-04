@@ -6,7 +6,7 @@ class Artist < ApplicationRecord
   end
 
   def sync!
-    return if updated_at > 1.day.ago
+    return if updated_at > 1.week.ago
 
     update_top_spotify_tracks if spotify_id.present?
 

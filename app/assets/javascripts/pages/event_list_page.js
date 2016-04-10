@@ -52,7 +52,11 @@ const EventListPage = React.createClass({
         <p>
           Pick about 10 bands you like. This will help us create a playlist for you.
         </p>
-        <button onClick={function() { browserHistory.push('/playlist') }} value='Done' />
+        <p>
+          <a href='#' onClick={function() { browserHistory.push('/playlist') }}>
+            Click here when done
+          </a>
+        </p>
         <EventList
           loading={this.state.loading}
           locationId={SessionStore.location}

@@ -12,31 +12,26 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree ./components
-//= require_tree ./pages
-//= require_tree .
+/* global $ */
 
 $(function() {
-  if (process.env.NODE_ENV === "production") {
-    var airbrakeClient = require('airbrake-js');
-    new airbrakeClient({
+  if (process.env.NODE_ENV === 'production') {
+    const airbrakeClient = require('airbrake-js');
+    airbrakeClient({
       projectId: '122450',
       projectKey: '8dc1ad11e4414db1e7cff67084b8ce78',
     });
   }
 
-  var React = require('react'),
-      ReactDOM = require('react-dom');
-  var flux = require('fluxify');
-  var AppContainer = require('components/app_container');
-  //var HeaderLocationPicker = require('components/header_location_picker');
+  const React = require('react');
+  const ReactDOM = require('react-dom');
+  const AppContainer = require('components/app_container');
 
   // This has to be required or else it won't be registered:
   require('components/session_store');
 
-  //var LocationSelector = require('components/location_selector');
   ReactDOM.render(
-    React.createElement(AppContainer, { bootstrapData: window.bootstrap || {} }),
-    document.getElementById("app-container")
+    React.createElement(AppContainer),
+    document.getElementById('app-container')
   );
 });

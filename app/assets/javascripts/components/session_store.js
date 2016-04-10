@@ -1,33 +1,33 @@
-var React = require('react'),
-    fluxify = require('fluxify');
+const fluxify = require('fluxify');
 
-var SessionStore = fluxify.createStore({
+const SessionStore = fluxify.createStore({
   id: 'sessionStore',
 
   initialState: {
-    location: null,
-    stars: [],
-    playlistUrl: null,
+    location: (window.bootstrap.metroArea || {}).id,
+    stars: (window.bootstrap.stars || []),
+    playlistUrl: (window.bootstrap.playlist || {}).url,
+    genres: window.bootstrap.genres,
   },
 
   actionCallbacks: {
-    updateStars: function(updater, stars) {
+    updateStars(updater, stars) {
       updater.set({
         stars: stars.map(function(e) {
-          return e[0] + "-" + e[1]
+          return e[0] + '-' + e[1];
         })
       });
     },
 
-    changeLocation: function(updater, location) {
+    changeLocation(updater, location) {
       updater.set({ location: location });
     },
 
-    changeGenres: function(updater, genres) {
+    changeGenres(updater, genres) {
       updater.set({ genres: genres });
     },
 
-    changePlaylistUrl: function(updater, url) {
+    changePlaylistUrl(updater, url) {
       updater.set({ playlistUrl: url });
     },
   }

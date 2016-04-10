@@ -1,19 +1,30 @@
-var React = require('react');
-var GenreSelector = require('components/genre_selector');
+/* global $ */
+const React = require('react');
+const flux = require('fluxify');
+const browserHistory = require('react-router').browserHistory;
 
-var GenrePage = React.createClass({
-  render: function() {
+const GenreSelector = require('components/genre_selector');
+const Page = require('components/page');
+
+const GenrePage = React.createClass({
+  _handleGenreSelection(genre) {
+    const xhr = $.ajax({
+      method: 'POST',
+      data: { genre: genre },
+      url: '/api/genres',
+    });
+    xhr.done(function() {
+      flux.doAction('changeGenres', [genre]);
+      browserHistory.push('/events');
+    });
+  },
+
+  render() {
     return (
-      <div className="app-page app-page2 container">
-        <div className="row">
-          <div className="col-xs-12">
-            <h1>Favorite Genre?</h1>
-            <p>This will improve song recommendations.</p>
-
-            <GenreSelector />
-          </div>
-        </div>
-      </div>
+      <Page header='Favorite Genre?'>
+        <p>This will help us make a playlist that has artist you actually like.</p>
+        <GenreSelector onSelect={this._handleGenreSelection} />
+      </Page>
     );
   }
 });

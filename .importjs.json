@@ -1,7 +1,10 @@
 {
   "lookup_paths": [
-    "app/assets/javascripts/components",
-    "app/assets/javascripts/pages"
+    "app/assets/javascripts"
   ],
-  "eslint_executable": "node_modules/.bin/eslint"
+  "eslint_executable": "node_modules/.bin/eslint",
+  "declaration_keyword": "const",
+  "aliases": {
+    "flux": "fluxify"
+  }
 }

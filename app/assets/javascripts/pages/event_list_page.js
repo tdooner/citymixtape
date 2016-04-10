@@ -1,29 +1,63 @@
-var React = require('react')
-var EventList = require('components/event_list');
-var SessionStore = require('components/session_store');
+/* global $ */
+const Page = require('components/page');
 
-var EventListPage = React.createClass({
-  componentDidMount: function() {
-    SessionStore.on('change:location', this.updateLocation);
+const flux = require('fluxify');
+const NProgress = require('NProgress');
+const React = require('react');
+const browserHistory = require('react-router').browserHistory;
+
+const EventList = require('components/event_list');
+const SessionStore = require('components/session_store');
+
+const EventListPage = React.createClass({
+  getInitialState() {
+    return {
+      loading: true,
+      results: null,
+      city: null,
+    };
   },
 
-  componentWillUnmount: function() {
-    SessionStore.off('change:location', this.updateLocation);
+  componentDidMount() {
+    NProgress.configure({ trickleSpeed: 100 });
+    NProgress.start();
+
+    $.ajax({
+      method: 'GET',
+      url: '/api/locations/' + SessionStore.location + '/events',
+    }).done(function(data) {
+      this.setState({ loading: false, events: data.events, city: data.city });
+      NProgress.done();
+    }.bind(this));
   },
 
-  updateLocation: function(previousLocationId, locationId) {
-    this.forceUpdate();
+  componentWillUnmount() {
+    NProgress.done();
   },
 
-  render: function() {
+  handleResetLocation() {
+    flux.doAction('changeLocation', null);
+  },
+
+  render() {
+    if (this.state.loading) {
+      return (
+        <Page header='Loading...' />
+      );
+    }
+
     return (
-      <div className="app-page app-page3 container">
-        <div className="row">
-          <div className="col-xs-12">
-            <EventList locationId={SessionStore.location} />
-          </div>
-        </div>
-      </div>
+      <Page header={`Bands coming to ${this.state.city}`}>
+        <p>
+          Pick about 10 bands you like. This will help us create a playlist for you.
+        </p>
+        <button onClick={browserHistory.push('/playlist')} value='Done' />
+        <EventList
+          loading={this.state.loading}
+          locationId={SessionStore.location}
+          events={this.state.events}
+        />
+      </Page>
     );
   }
 });

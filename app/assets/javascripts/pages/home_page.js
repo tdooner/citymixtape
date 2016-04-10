@@ -1,23 +1,25 @@
-var React = require('react');
-var LocationSelector = require('components/location_selector');
+const React = require('react');
+const flux = require('fluxify');
 
-var HomePage = React.createClass({
-  render: function() {
+const browserHistory = require('react-router').browserHistory;
+
+const LocationSelector = require('components/location_selector');
+const Page = require('components/page');
+
+const HomePage = React.createClass({
+  _handleLocationSelection(locationId) {
+    flux.doAction('changeLocation', locationId);
+    browserHistory.push('/genres');
+  },
+
+  render() {
     return (
-      <div className="app-page app-page1 container">
-        <div className="row">
-          <div className="col-xs-12">
-            <h1>City Mixtape</h1>
-          </div>
-        </div>
+      <Page header='Where do you live?'>
+        <p>Your playlist will only include bands that are
+        performing soon in this general area.</p>
 
-        <div className="row">
-          <div className="col-xs-12">
-            <p>Where do you live?</p>
-            <LocationSelector initialSearchQuery={this.props.initialSearchQuery} />
-          </div>
-        </div>
-      </div>
+        <LocationSelector onSelect={browserHistory.push('/genres')} />
+      </Page>
     );
   }
 });

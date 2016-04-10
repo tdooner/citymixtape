@@ -3,6 +3,10 @@ class MetroAreaSearchResult < ApplicationRecord
 
   scope :sf, -> { find_by(metro_area_id: 26330) }
 
+  def city_name
+    JSON.parse(results).first['location']['city'].split(',').first
+  end
+
   def self.search(metro_area_id)
     res = find_by(metro_area_id: metro_area_id) || self.sync!(metro_area_id)
 

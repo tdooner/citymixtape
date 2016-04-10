@@ -14,7 +14,7 @@ class SpotifyClient
     @client_secret = client_secret
   end
 
-  def create_playlist(songs)
+  def create_playlist(songs, name: 'City Mixtape')
     maybe_refresh_token
 
     create_uri = URI("https://api.spotify.com/v1/users/#{ENV['SPOTIFY_USER']}/playlists")
@@ -23,7 +23,7 @@ class SpotifyClient
       req = Net::HTTP::Post.new(create_uri.request_uri)
       req['Authorization'] = "Bearer #{@access_token}"
       req.body = JSON.generate(
-        name: 'City Mixtape',
+        name: name,
         public: true,
       )
       resp = http.request(req)

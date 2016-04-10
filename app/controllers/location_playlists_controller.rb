@@ -11,7 +11,12 @@ class LocationPlaylistsController < ApplicationController
     picker.personalize_stars(user_session.stars)
     picker.personalize_genres(user_session.genres)
 
-    playlist_uri = SPOTIFY.create_playlist(picker.songs)
+    playlist_name = [
+      params[:first_name],
+      MetroAreaSearchResult.find_by(metro_area_id: location).city_name,
+    ].join(' – ')
+
+    playlist_uri = SPOTIFY.create_playlist(picker.songs, name: playlist_name)
     human_uri = SPOTIFY.get_playlist_by_uri(playlist_uri)['external_urls']['spotify']
 
     user_session.update_attributes(

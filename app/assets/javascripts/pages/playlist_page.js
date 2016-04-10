@@ -7,20 +7,20 @@ const SessionStore = require('components/session_store');
 
 const PlaylistPage = React.createClass({
   getInitialState() {
-    return { playlistUrl: null };
+    return { playlistUrl: null, loading: false };
   },
 
   componentDidMount() {
-    SessionStore.on('change:playlistUrl', this.playlistUrl);
+    SessionStore.on('change:playlistUrl', this.updatePlaylistUrl);
     SessionStore.on('change', this.forceUpdate);
   },
 
   componentWillUnmount() {
-    SessionStore.off('change:playlistUrl', this.playlistUrl);
+    SessionStore.off('change:playlistUrl', this.updatePlaylistUrl);
     SessionStore.off('change', this.forceUpdate);
   },
 
-  updateplaylistUrl(previousplaylistUrl, playlistUrl) {
+  updatePlaylistUrl(previousplaylistUrl, playlistUrl) {
     this.setState({ playlistUrl: playlistUrl });
   },
 
@@ -39,6 +39,8 @@ const PlaylistPage = React.createClass({
       return;
     }
 
+    this.setState({ loading: true });
+
     $.ajax({
       method: 'POST',
       url: '/api/locations/' + SessionStore.location + '/playlist',
@@ -49,10 +51,21 @@ const PlaylistPage = React.createClass({
       },
     }).done(function(data) {
       flux.doAction('changePlaylistUrl', data.spotify_uri);
+      this.setState({ loading: false });
     });
   },
 
   render() {
+    if (this.state.loading) {
+      return (
+        <Page header='Loading...'>
+          <p>Sometimes it can take 10 seconds to create the first playlist.</p>
+          <p>Yeah, that's a long time in today's world... but at least you're
+          going to get some good music by waiting</p>
+        </Page>
+      );
+    }
+
     const renderPlaylistUrl = (
       <Page header='Playlist created!'>
         <p><a href={this.state.playlistUrl} target='_blank'>Open Playlist!</a></p>

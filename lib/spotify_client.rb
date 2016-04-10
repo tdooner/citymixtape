@@ -17,7 +17,7 @@ class SpotifyClient
   def create_playlist(songs)
     maybe_refresh_token
 
-    create_uri = URI('https://api.spotify.com/v1/users/tdooner/playlists')
+    create_uri = URI("https://api.spotify.com/v1/users/#{ENV['SPOTIFY_USER']}/playlists")
     playlist_uri = nil
     Net::HTTP.start(create_uri.host, create_uri.port, use_ssl: true) do |http|
       req = Net::HTTP::Post.new(create_uri.request_uri)

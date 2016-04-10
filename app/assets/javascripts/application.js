@@ -16,8 +16,8 @@
 
 $(function() {
   if (process.env.NODE_ENV === 'production') {
-    const airbrakeClient = require('airbrake-js');
-    airbrakeClient({
+    const Client = require('airbrake-js');
+    new Client({
       projectId: '122450',
       projectKey: '8dc1ad11e4414db1e7cff67084b8ce78',
     });

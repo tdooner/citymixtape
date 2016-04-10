@@ -2,8 +2,6 @@ class StarsController < ApplicationController
   before_action :validate_type
   before_action :validate_session
 
-  skip_before_action :verify_authenticity_token
-
   def create
     star = Session.star!(session.id, params[:type], params[:id])
     render json: star.stars

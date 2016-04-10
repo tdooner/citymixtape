@@ -1,6 +1,4 @@
 class LocationPlaylistsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
   def create
     user_session = Session.find_by(session_id: session.id)
     return render :unprocessible_entity unless user_session

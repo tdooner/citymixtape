@@ -12,12 +12,10 @@ const PlaylistPage = React.createClass({
 
   componentDidMount() {
     SessionStore.on('change:playlistUrl', this.updatePlaylistUrl);
-    SessionStore.on('change', this.forceUpdate);
   },
 
   componentWillUnmount() {
     SessionStore.off('change:playlistUrl', this.updatePlaylistUrl);
-    SessionStore.off('change', this.forceUpdate);
   },
 
   updatePlaylistUrl(previousplaylistUrl, playlistUrl) {
@@ -52,7 +50,7 @@ const PlaylistPage = React.createClass({
     }).done(function(data) {
       flux.doAction('changePlaylistUrl', data.spotify_uri);
       this.setState({ loading: false });
-    });
+    }.bind(this));
   },
 
   render() {

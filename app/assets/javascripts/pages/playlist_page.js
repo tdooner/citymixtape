@@ -28,7 +28,6 @@ const PlaylistPage = React.createClass({
     const firstName = this._name.value;
     const email = this._email.value;
     const enable = this._enable.checked;
-    console.log(enable);
 
     if (!firstName.length) {
       this.setState({ error: 'First name is empty!' });
@@ -67,14 +66,21 @@ const PlaylistPage = React.createClass({
           <fieldset className='form-group row'>
             <label className='col-xs-2' htmlFor='name'>First Name</label>
             <div className='col-xs-4'>
-              <input ref={(e) => this._name = e} className='form-control' name='name' type='text' />
+              <input
+                ref={function(e) {
+                  this._name = e;
+                }}
+                className='form-control' name='name' type='text' />
             </div>
           </fieldset>
 
           <fieldset className='form-group row'>
             <label className='col-xs-2' htmlFor='name'>Email</label>
             <div className='col-xs-4'>
-              <input ref={(e) => this._email = e} className='form-control' name='email' type='email' />
+              <input
+                ref={function(e) {
+                  this._email = e;
+                }} className='form-control' name='email' type='email' />
             </div>
           </fieldset>
 
@@ -82,15 +88,18 @@ const PlaylistPage = React.createClass({
             <div className='col-xs-offset-2 col-xs-4'>
               <p>You will be emailed a link to edit this playlist later.</p>
               <label>
-                <input ref={(e) => this._enable = e} name='enable_newsletter' defaultChecked type='checkbox' />
+                <input
+                  ref={function(e) {
+                    this._enable = e;
+                  }} name='enable_newsletter' defaultChecked type='checkbox' />
                 Also email me a weekly summary
               </label>
             </div>
           </div>
         </div>
 
-        <div className="row">
-          <div className="col-xs-12">
+        <div className='row'>
+          <div className='col-xs-12'>
             <a href='#' onClick={this.handleCreatePlaylistClick}>Create Spotify Playlist</a>
           </div>
         </div>

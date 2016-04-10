@@ -7,7 +7,7 @@ const SessionStore = require('components/session_store');
 
 const PlaylistPage = React.createClass({
   getInitialState() {
-    return { playlistUrl: null, loading: false };
+    return { playlistUrl: SessionStore.playlistUrl, loading: false };
   },
 
   componentDidMount() {

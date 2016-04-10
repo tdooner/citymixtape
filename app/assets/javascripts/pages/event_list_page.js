@@ -57,11 +57,14 @@ const EventListPage = React.createClass({
             Click here when done
           </a>
         </p>
+
         <EventList
           loading={this.state.loading}
           locationId={SessionStore.location}
           events={this.state.events}
         />
+
+        <img src='/songkick_logo.png' />
       </Page>
     );
   }

@@ -26,11 +26,17 @@ class LocationsController < ApplicationController
     current_session.update_attributes(metro_area_id: location) unless location == 0
 
     performances = MetroAreaSearchResult.search(location)
+    performances.each do |performance|
+      performance['performances'].each do |p|
+        p['artist']['songkick_ticket_url'] = performance['uri']
+      end
+    end
+
     events = performances
       .flat_map { |p| p['performances'] }
       .map { |p| p['artist'] }
       .uniq { |a| a['id'] }
-      .map { |a| a.slice('display_name', 'id') }
+      .map { |a| a.slice('display_name', 'id', 'songkick_ticket_url') }
       .sort_by { |a| a['display_name'] }
 
     # TODO: Handle multiple genres

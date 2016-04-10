@@ -11,7 +11,7 @@ const EventList = React.createClass({
       return (
         <li className='event-list__list-item'>
           <Star objectId={event.id} objectType='artist' />
-          <span>{event.display_name}</span>
+          <span>{event.display_name} (<a href={event.songkick_ticket_url} target='_blank'>Buy Tickets</a>)</span>
         </li>
       );
     };

@@ -1,6 +1,6 @@
 class UpdatePlaylist < ApplicationJob
   def perform(session)
-    picker = PlaylistSongPicker.new(session.location)
+    picker = PlaylistSongPicker.new(session.metro_area_id)
     picker.personalize_stars(session.stars)
     picker.personalize_genres(session.genres)
 

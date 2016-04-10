@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160402214743) do
+ActiveRecord::Schema.define(version: 20160410064135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,9 +45,12 @@ ActiveRecord::Schema.define(version: 20160402214743) do
   create_table "sessions", primary_key: "session_id", id: :string, force: :cascade do |t|
     t.text    "stars"
     t.integer "metro_area_id"
-    t.jsonb   "genres",         default: [], null: false
+    t.jsonb   "genres",            default: [], null: false
     t.jsonb   "playlist_songs"
     t.string  "playlist_uri"
+    t.string  "name"
+    t.string  "email"
+    t.boolean "newsletter_opt_in"
   end
 
 end

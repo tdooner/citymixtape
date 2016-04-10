@@ -35,6 +35,16 @@ const Page = React.createClass({
             </div>
           </div>
         </div>
+
+        <div className='container'>
+          <div className='row'>
+            <div className='col-xs-2 col-xs-offset-10'>
+              <p style={{ color: '#fff' }}>
+                Logo by <a style={{ color: '#ccc'}} href='https://thenounproject.com/lastspark'>lastspark</a>.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

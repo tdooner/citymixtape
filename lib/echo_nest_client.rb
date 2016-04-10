@@ -13,7 +13,9 @@ class EchoNestClient
 
     Rails.logger.debug("Fetching Echo Nest Artist: #{musicbrainz_id}")
     start_time = Time.now
-    resp = Net::HTTP.get_response(base)
+    resp = Net::HTTP.start(base.host, base.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+      resp = http.request Net::HTTP::Get.new base.request_uri
+    end
     body = JSON.parse(resp.body)
 
     case body['response']['status']['code']

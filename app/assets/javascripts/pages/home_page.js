@@ -18,7 +18,7 @@ const HomePage = React.createClass({
         <p>Your playlist will only include bands that are
         performing soon in this general area.</p>
 
-        <LocationSelector onSelect={browserHistory.push('/genres')} />
+        <LocationSelector onSelect={this._handleLocationSelection} />
       </Page>
     );
   }

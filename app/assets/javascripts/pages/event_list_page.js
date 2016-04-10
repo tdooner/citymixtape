@@ -1,9 +1,10 @@
 /* global $ */
+const NProgress = require('nprogress');
+const React = require('react');
+const flux = require('fluxify');
+
 const Page = require('components/page');
 
-const flux = require('fluxify');
-const NProgress = require('NProgress');
-const React = require('react');
 const browserHistory = require('react-router').browserHistory;
 
 const EventList = require('components/event_list');

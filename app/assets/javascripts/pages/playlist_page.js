@@ -18,7 +18,7 @@ const PlaylistPage = React.createClass({
     SessionStore.off('change:playlistUrl', this.updatePlaylistUrl);
   },
 
-  updatePlaylistUrl(previousplaylistUrl, playlistUrl) {
+  updatePlaylistUrl(playlistUrl) {
     this.setState({ playlistUrl: playlistUrl });
   },
 

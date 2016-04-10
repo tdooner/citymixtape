@@ -13,7 +13,7 @@ const Page = React.createClass({
           <div className='row'>
             <div className='col-xs-12'>
               <a href='/'>
-                <img src={'/assets/logo.svg'} className='app-logo' />
+                <img src={window.assets.logo} className='app-logo' />
                 <h1 className='app-wordmark'>City Mixtape</h1>
               </a>
             </div>

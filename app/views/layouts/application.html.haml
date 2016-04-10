@@ -6,6 +6,9 @@
     = action_cable_meta_tag
 
     :javascript
+      window.assets = {};
+      window.assets.logo = #{image_path('logo.svg').to_json};
+
       window.bootstrap = {};
       window.bootstrap.stars = #{@bootstrap_data[:stars].to_json};
       window.bootstrap.metroArea = #{@bootstrap_data[:metro_area].to_json};

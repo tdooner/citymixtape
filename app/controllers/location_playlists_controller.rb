@@ -17,6 +17,9 @@ class LocationPlaylistsController < ApplicationController
     user_session.update_attributes(
       playlist_songs: picker.songs,
       playlist_uri: playlist_uri,
+      name: params[:first_name],
+      email: params[:email],
+      newsletter_opt_in: params[:email] == 'true',
     )
 
     render json: {

@@ -5,6 +5,17 @@ class SpotifyClient
   TOKEN_FILENAME = '.spotify-access-token'
   class PlaylistNotFound < StandardError; end
 
+  # converts
+  # "https://api.spotify.com/v1/users/citymixtape/playlists/1qtcK3OWtSAuxPqOsG5d8G/"
+  # to
+  # "https://play.spotify.com/user/citymixtape/playlist/1qtcK3OWtSAuxPqOsG5d8G"
+  def self.convert_playlist_url(api_url)
+    return nil unless api_url
+    playlist_id = api_url.split('/').last
+
+    "https://play.spotify.com/user/citymixtape/playlist/#{playlist_id}"
+  end
+
   def initialize(refresh_token, client_id=ENV['SPOTIFY_CLIENT_ID'], client_secret=ENV['SPOTIFY_CLIENT_SECRET'])
     raise ArgumentError, 'You must supply a spotify refresh token!' unless refresh_token
     @refresh_token = refresh_token

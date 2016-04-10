@@ -7,7 +7,9 @@ class HomeController < ApplicationController
       # TODO: don't hardcode this
       @bootstrap_data[:metro_area] = { id: user_session.metro_area_id, name: 'San Francisco, CA' }
       @bootstrap_data[:genres] = user_session.genres
-      @bootstrap_data[:playlist] = { url: user_session.playlist_uri }
+      @bootstrap_data[:playlist] = {
+        url: SpotifyClient.convert_playlist_url(user_session.playlist_uri)
+      }
     end
   end
 end

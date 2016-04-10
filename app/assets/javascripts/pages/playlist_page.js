@@ -69,7 +69,7 @@ const PlaylistPage = React.createClass({
               <input
                 ref={function(e) {
                   this._name = e;
-                }}
+                }.bind(this)}
                 className='form-control' name='name' type='text' />
             </div>
           </fieldset>
@@ -80,7 +80,7 @@ const PlaylistPage = React.createClass({
               <input
                 ref={function(e) {
                   this._email = e;
-                }} className='form-control' name='email' type='email' />
+                }.bind(this)} className='form-control' name='email' type='email' />
             </div>
           </fieldset>
 
@@ -91,7 +91,7 @@ const PlaylistPage = React.createClass({
                 <input
                   ref={function(e) {
                     this._enable = e;
-                  }} name='enable_newsletter' defaultChecked type='checkbox' />
+                  }.bind(this)} name='enable_newsletter' defaultChecked type='checkbox' />
                 Also email me a weekly summary
               </label>
             </div>

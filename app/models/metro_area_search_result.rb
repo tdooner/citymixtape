@@ -4,7 +4,7 @@ class MetroAreaSearchResult < ApplicationRecord
   scope :sf, -> { find_by(metro_area_id: 26330) }
 
   def city_name
-    JSON.parse(results).first['location']['city'].split(',').first
+    JSON.parse(results).first['venue']['metro_area']['display_name']
   end
 
   def self.search(metro_area_id)

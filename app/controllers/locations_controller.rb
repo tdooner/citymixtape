@@ -45,7 +45,7 @@ class LocationsController < ApplicationController
     events.select! { |e| found_artists.include?(e['id']) }
 
     render json: {
-      city: performances.first['location']['city'],
+      city: MetroAreaSearchResult.find_by(metro_area_id: location).city_name,
       events: events
     }
   end

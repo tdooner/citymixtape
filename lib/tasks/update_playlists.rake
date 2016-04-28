@@ -3,7 +3,7 @@ task update_playlists: :environment do
   Session.where.not(playlist_uri: nil).find_each do |session|
     retried = false
     begin
-      UpdatePlaylist.perform_later(session)
+      UpdatePlaylist.perform_now(session)
     rescue => ex
       Airbrake.notify(ex)
 

@@ -26,18 +26,8 @@ class PlaylistSongPicker
   def songs
     return @playlist_songs unless @playlist_songs.nil?
 
-    res = MetroAreaSearchResult.search(@metro_area_id)
-
-    mbids = res.flat_map do |show|
-      Array(show['performances']).flat_map do |performance|
-        Array(performance.fetch('artist', {})['identifier']).map { |i| i['mbid'] }
-      end
-    end.compact.uniq
-
-    @artists = mbids.in_groups_of(100, false).flat_map do |mbids_batch|
-      Artist.where(musicbrainz_id: mbids_batch).map do |artist|
-        next unless artist.spotify_id
-
+    @artists =
+      Artist.playing_in(@metro_area_id).where.not(spotify_id: nil).find_each.map do |artist|
         score = 0
         score += 3 if @starred_songkick_ids.include?(artist.songkick_id)
         score += 2 if (@suggested_genres & artist.genres).any?
@@ -50,7 +40,6 @@ class PlaylistSongPicker
           score: score
         }
       end
-    end.compact
 
     @playlist_songs = []
 

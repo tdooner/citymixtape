@@ -1,6 +1,19 @@
 class Artist < ApplicationRecord
   self.primary_key = :songkick_id
 
+  scope :by_genre, ->(genre) { where("genres ? #{connection.quote(genre)}") }
+
+  scope :playing_in, ->(metro_area_id) {
+    where("musicbrainz_id IN (
+SELECT DISTINCT(identifiers->>'mbid')
+AS playing_soon_mbid
+FROM metro_area_search_results m,
+     jsonb_array_elements(m.results::jsonb) shows,
+     jsonb_array_elements(shows->'performances') performances,
+     jsonb_array_elements(performances->'artist'->'identifier') identifiers
+WHERE m.metro_area_id = #{sanitize(metro_area_id)})");
+  }
+
   def self.similar_to(songkick_id)
     where('similar_artists @> ?', songkick_id.to_s)
   end

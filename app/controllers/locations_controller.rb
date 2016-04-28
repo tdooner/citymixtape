@@ -41,8 +41,8 @@ class LocationsController < ApplicationController
 
     # TODO: Handle multiple genres
     found_artists = Artist
+      .playing_in(location)
       .where('spotify_id is not null')
-      .where("songkick_id IN (#{events.map { |e| e['id'] }.join(',')})")
       .where('genres ?| array[:genres]',
              genres: (GenreSimilarity.similar_to(current_session.genres.first).presence || current_session.genres.first.inspect))
       .pluck(:songkick_id)

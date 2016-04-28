@@ -160,8 +160,6 @@ class SpotifyClient
   end
 
   def handle_failure(req, resp)
-    require 'pry'
-    binding.pry
     raise "Request Failed: #{resp.code} #{req.path}"
   end
 end

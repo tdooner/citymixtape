@@ -38,7 +38,8 @@ class SpotifyClient
         public: true,
       )
       resp = http.request(req)
-      raise "Request Failed: #{resp.code} #{create_uri}" unless resp.code.to_i < 300
+
+      handle_failure(req, resp) unless resp.code.to_i < 300
 
       playlist_uri = resp['Location']
 
@@ -68,7 +69,7 @@ class SpotifyClient
           snapshot_id: playlist['snapshot_id']
         )
         resp = http.request(req)
-        raise "Request Failed: #{resp.code} #{playlist_uri}" unless resp.code.to_i < 300
+        handle_failure(req, resp) unless resp.code.to_i < 300
         bunch += 100
       end
 
@@ -81,7 +82,7 @@ class SpotifyClient
           uris: song_batch
         )
         resp = http.request(req)
-        raise "Request Failed: #{resp.code} #{req.path}" unless resp.code.to_i < 300
+        handle_failure(req, resp) unless resp.code.to_i < 300
       end
     end
 
@@ -99,7 +100,7 @@ class SpotifyClient
 
       resp = http.request(req)
       raise PlaylistNotFound if resp.code.to_i == 404
-      raise "Request Failed: #{playlist_uri}" unless resp.code.to_i < 300
+      handle_failure(req, resp) unless resp.code.to_i < 300
 
       JSON.parse(resp.body)
     end
@@ -156,5 +157,11 @@ class SpotifyClient
       @access_token_expires_at = Time.now + new_token.delete('expires_in')
       @access_token = new_token['access_token']
     end
+  end
+
+  def handle_failure(req, resp)
+    require 'pry'
+    binding.pry
+    raise "Request Failed: #{resp.code} #{req.path}"
   end
 end

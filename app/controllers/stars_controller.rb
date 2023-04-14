@@ -22,7 +22,7 @@ private
 
   def validate_type
     unless %w[artist venue].include?(params[:type])
-      render text: 'invalid type!', status: :unprocessable_entity 
+      render text: 'invalid type!', status: :unprocessable_entity
     end
   end
 end
